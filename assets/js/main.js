@@ -388,6 +388,23 @@
     if (reduce) draw(); else requestAnimationFrame(loop);
   }
 
+
+  /* Visionneuse plein écran (captures et certificats) */
+  var lb = document.createElement("div"); lb.className = "lb"; lb.setAttribute("role", "dialog"); lb.setAttribute("aria-modal", "true");
+  lb.innerHTML = '<button type="button" aria-label="Fermer"><svg class="ico" aria-hidden="true"><use href="#i-x"/></svg></button><img alt="">';
+  document.body.appendChild(lb);
+  var lbImg = lb.querySelector("img"), lastFocus = null;
+  function lbClose() { lb.classList.remove("open"); document.body.classList.remove("lb-open"); if (lastFocus) lastFocus.focus(); }
+  document.querySelectorAll("[data-lightbox]").forEach(function (a) {
+    a.addEventListener("click", function (e) {
+      e.preventDefault(); lastFocus = a;
+      var im = a.querySelector("img"); lbImg.src = a.getAttribute("href"); lbImg.alt = im ? im.alt : "";
+      lb.classList.add("open"); document.body.classList.add("lb-open"); lb.querySelector("button").focus();
+    });
+  });
+  lb.addEventListener("click", function (e) { if (e.target !== lbImg) lbClose(); });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape" && lb.classList.contains("open")) lbClose(); });
+
   document.querySelectorAll("[data-year]").forEach(function (el) { el.textContent = new Date().getFullYear(); });
 
   setLang(getLang());
