@@ -113,13 +113,26 @@
 
   /* ---------------- Reveal ---------------- */
   var io = null;
-  var rv = document.querySelectorAll(".rv");
+  /* Apparition au défilement : détection par position (fiable sur tous les navigateurs) */
+  function revealCheck() {
+    var vh = window.innerHeight;
+    document.querySelectorAll(".rv:not(.in)").forEach(function (el) {
+      var r = el.getBoundingClientRect();
+      if (r.top < vh * 0.94 && r.bottom > 0) el.classList.add("in");
+    });
+  }
   if ("IntersectionObserver" in window) {
-    var io = new IntersectionObserver(function (es) {
+    io = new IntersectionObserver(function (es) {
       es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } });
-    }, { rootMargin: "0px 0px -8% 0px", threshold: 0.08 });
-    rv.forEach(function (el) { io.observe(el); });
-  } else { rv.forEach(function (el) { el.classList.add("in"); }); }
+    }, { rootMargin: "0px 0px -6% 0px", threshold: 0 });
+    document.querySelectorAll(".rv").forEach(function (el) { io.observe(el); });
+  }
+  window.addEventListener("scroll", revealCheck, { passive: true });
+  window.addEventListener("resize", revealCheck);
+  window.addEventListener("load", revealCheck);
+  revealCheck();
+  /* Filet de sécurité : rien ne reste invisible plus de 4 secondes */
+  setTimeout(function () { document.querySelectorAll(".rv:not(.in)").forEach(function (el) { el.classList.add("in"); }); }, 4000);
 
   /* Halo doré qui suit la souris sur les cartes */
   document.querySelectorAll(".card").forEach(function (c) {
@@ -306,7 +319,8 @@
   }, 120); });
 
   /* Images des services : révélation en volet */
-  document.querySelectorAll(".svc-media").forEach(function (m) { m.classList.add("rv"); if (io) io.observe(m); else m.classList.add("in"); });
+  document.querySelectorAll(".svc-media").forEach(function (m) { m.classList.add("rv", "rv-zoom"); if (io) io.observe(m); });
+  revealCheck();
 
   /* Apparitions en cascade dans les grilles */
   document.querySelectorAll(".grid, .steps, .pillars, .pairs, .faq").forEach(function (g) {

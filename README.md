@@ -25,7 +25,7 @@ Tout se règle dans **un seul fichier** :
 - **Durées et tarifs des formations** : `programs` (vide = « À confirmer »).
 
 ## Contenus à fournir par le client
-- Témoignages réels (emplacements marqués « Emplacement réservé » sur l’accueil).
+- Témoignages écrits réels (la section a été retirée en attendant ; à rajouter dès réception).
 - Histoire de l’entreprise : date de création, fondateur(s) (voir le commentaire dans `a-propos.html`).
 - Noms et rôles des membres de l’équipe.
 - Nom exact de la communauté : le brief mentionne « Global Market International » (Telegram) et « Global Market Investment » (entreprise).
